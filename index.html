@@ -4,7 +4,68 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thinner</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+      integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script defer src="./script.js"></script>
+    <title>Thinner | Your web, made lighter.</title>
   </head>
-  <body></body>
+  <body>
+    <div class="page-container">
+      <div class="ui-container">
+        <button class="btn-ui btn-search" id="btn-search">
+          <i
+            class="fa-solid fa-magnifying-glass"
+            title="Search for a new article"
+          ></i>
+        </button>
+        <button
+          class="btn-ui btn-add-remove-fav"
+          data-added-status=""
+          id="btn-add-remove-fav"
+        >
+          <!-- dynamically added in JS  -->
+        </button>
+        <button class="btn-ui btn-show-favs" id="btn-show-favs">
+          <i class="fa-solid fa-star" title="Show your saved Articles"></i>
+        </button>
+      </div>
+      <h1 class="article-title">Example Title</h1>
+      <h6 class="article-author">Written by: A Famous Author</h6>
+      <article class="article-body">
+        <p class="article-graph">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus,
+          suscipit. Nihil ducimus harum sed deserunt distinctio eum deleniti
+          fuga fugiat aperiam, maxime aut ratione repudiandae cumque modi quae
+          commodi animi.
+        </p>
+        <p class="article-graph">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni,
+          maxime voluptatum quisquam nemo vel laudantium animi reiciendis beatae
+          possimus a similique perferendis autem error pariatur provident libero
+          id eum unde totam? Corporis molestiae ipsam quos ipsa minus, itaque
+          quia recusandae, explicabo dolorem consequatur ipsum officia ab vel
+          laudantium deserunt distinctio soluta sequi. Modi, nostrum odit.
+          Adipisci possimus suscipit blanditiis nam magni ducimus. Cupiditate
+          earum necessitatibus ipsa molestiae quaerat animi eligendi.
+          Repudiandae repellat, quasi odit non possimus dolorum sed.
+        </p>
+        <p class="article-graph">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque
+          cumque dignissimos eligendi earum iste saepe reprehenderit in aperiam
+          unde. Nostrum ab quo inventore ipsum reprehenderit rerum, voluptatem
+          natus temporibus eum repellat reiciendis dolores facere ea, soluta,
+          magnam id quibusdam dolor repellendus? Illo hic nisi beatae pariatur
+          eligendi eos recusandae dolores sapiente aspernatur molestiae
+          praesentium necessitatibus nobis quidem exercitationem perferendis,
+          error minima modi enim?
+        </p>
+      </article>
+    </div>
+  </body>
 </html>
