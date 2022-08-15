@@ -16,6 +16,39 @@
     <title>Thinner | Your web, made lighter.</title>
   </head>
   <body>
+    <div class="saved-article-container" id="saved-article-container">
+      <h3>Read</h3>
+      <div class="saved-articles-read">
+        <div class="saved-article unread">
+          <p class="saved-article-title">Title</p>
+          <p class="saved-article-snippet">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
+            deserunt nemo...
+          </p>
+        </div>
+      </div>
+
+      <h3>Unread</h3>
+      <div class="saved-articles-unread">
+        <div class="saved-article unread">
+          <p class="saved-article-title">Title</p>
+          <p class="saved-article-snippet">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
+            deserunt nemo...
+          </p>
+        </div>
+        <div class="saved-article unread">
+          <p class="saved-article-title">
+            Example of a long title that breaks into two lines
+          </p>
+          <p class="saved-article-snippet">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
+            deserunt nemo...
+          </p>
+        </div>
+      </div>
+      <div class="saved-article"></div>
+    </div>
     <div class="page-container">
       <div class="ui-container">
         <button class="btn-ui btn-search" id="btn-search">
@@ -37,7 +70,10 @@
       </div>
       <h1 class="article-title">Example Title</h1>
       <h6 class="article-author">Written by: A Famous Author</h6>
-      <article class="article-body">
+      <a class="article-link" href="https://duckduckgo.com" target="_blank"
+        >Link to Article</a
+      >
+      <article class="article-body" data-article-read-status="read">
         <p class="article-graph">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus,
           suscipit. Nihil ducimus harum sed deserunt distinctio eum deleniti

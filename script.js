@@ -2,6 +2,8 @@ const searchBtn = document.querySelector("#btn-search");
 const addRemoveToFavsBtn = document.querySelector("#btn-add-remove-fav");
 const showFavsBtn = document.querySelector("#btn-show-favs");
 
+const savedArticlesDiv = document.querySelector("#saved-article-container");
+
 // EVENT LISTENERS
 searchBtn.addEventListener("click", () => handleArticleFetch());
 
@@ -22,7 +24,8 @@ function handleFavoriteButtonClicked(buttonStatus) {
 }
 
 function handleShowFavs() {
-  alert("showing favs");
+  savedArticlesDiv.classList.toggle("visible");
+  showFavsBtn.classList.toggle("active");
 }
 
 function checkArticleFavoriteStatus(buttonStatus) {
