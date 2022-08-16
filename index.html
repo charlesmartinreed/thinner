@@ -82,22 +82,42 @@
     </div>
     <div class="page-container">
       <div class="ui-container">
-        <button
-          class="btn btn-ui btn-change-text-size"
-          id="btn-change-text-size"
-        >
-          <i class="fa-solid fa-text-height"></i>
-        </button>
-        <button
-          class="btn btn-ui btn-show-hide-images"
-          id="btn-show-hide-images"
-          title="Show/Hide article images"
-        >
-          <i class="fa-solid fa-image"></i>
-        </button>
-        <button class="btn btn-ui btn-show-favs" id="btn-show-favs">
-          <i class="fa-solid fa-star" title="Show your saved articles"></i>
-        </button>
+        <div class="ui-btn-container-left">
+          <button
+            class="btn btn-ui btn-change-text-size"
+            id="btn-change-text-size-small"
+            data-size="small"
+          >
+            <i class="fa-solid fa-font" title="Set font to small"></i>
+          </button>
+          <button
+            class="btn btn-ui btn-change-text-size"
+            id="btn-change-text-size-medium"
+            data-size="medium"
+          >
+            <i class="fa-solid fa-font" title="Set font to medium"></i>
+          </button>
+          <button
+            class="btn btn-ui btn-change-text-size"
+            id="btn-change-text-size-large"
+            data-size="large"
+          >
+            <i class="fa-solid fa-font" title="Set font to large"></i>
+          </button>
+        </div>
+
+        <div class="ui-btn-container-right">
+          <button
+            class="btn btn-ui btn-show-hide-images"
+            id="btn-show-hide-images"
+            title="Show/Hide article images"
+          >
+            <i class="fa-solid fa-image"></i>
+          </button>
+          <button class="btn btn-ui btn-show-favs" id="btn-show-favs">
+            <i class="fa-solid fa-star" title="Show your saved articles"></i>
+          </button>
+        </div>
       </div>
       <h1 class="article-title">Example Title</h1>
       <h6 class="article-author">Written by: A Famous Author</h6>
