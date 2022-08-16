@@ -1,26 +1,46 @@
-const searchBtn = document.querySelector("#btn-search");
-const addRemoveToFavsBtn = document.querySelector("#btn-add-remove-fav");
+const changeTextSizeBtn = document.querySelector("#btn-change-text-size");
+const showImagesBtn = document.querySelector("#btn-show-hide-images");
 const showFavsBtn = document.querySelector("#btn-show-favs");
+let startingFontSize = parseInt(
+  window
+    .getComputedStyle(document.documentElement)
+    .getPropertyValue("--font-size-default")
+);
+let currentFontSize = parseInt(startingFontSize);
 
 const savedArticlesDiv = document.querySelector("#saved-article-container");
 
 // EVENT LISTENERS
-searchBtn.addEventListener("click", () => handleArticleFetch());
+changeTextSizeBtn.addEventListener("click", () => handleTextSizeChange());
 
-addRemoveToFavsBtn.addEventListener("click", (e) =>
-  handleFavoriteButtonClicked(e.target.getAttribute("data-added-status"))
-);
+showImagesBtn.addEventListener("click", () => handleShowImages());
 
 showFavsBtn.addEventListener("click", () => handleShowFavs());
 
 // HANDLER FUNCTIONS
+function handleTextSizeChange() {
+  let proposedSize = (currentFontSize += 4);
+
+  if (currentFontSize < startingFontSize * 2) {
+    currentFontSize = proposedSize;
+  } else {
+    currentFontSize = startingFontSize;
+  }
+
+  document.documentElement.style.setProperty(
+    "--font-size-default",
+    `${proposedSize}px`
+  );
+
+  console.log("text is now", currentFontSize, "px");
+}
+
 function handleArticleFetch(url) {
   alert("fetching now");
 }
 
-function handleFavoriteButtonClicked(buttonStatus) {
-  //   update Button
-  addRemoveToFavsBtn.innerHTML = checkArticleFavoriteStatus(buttonStatus);
+function handleShowImages() {
+  alert("displaying images now");
 }
 
 function handleShowFavs() {
@@ -34,10 +54,3 @@ function checkArticleFavoriteStatus(buttonStatus) {
 
   return buttonStatus === "added" ? removeIcon : addIcon;
 }
-
-// PLACEHOLDER; won't need to hard check this at every page load, probably.
-window.addEventListener("DOMContentLoaded", () =>
-  handleFavoriteButtonClicked(
-    addRemoveToFavsBtn.getAttribute("data-added-status")
-  )
-);

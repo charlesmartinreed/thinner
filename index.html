@@ -28,9 +28,12 @@
             </p>
           </div>
           <div class="saved-article-right-pane">
-            <span id="delete-saved-article-button">
-              <i class="fa-solid fa-trash-can"></i>
-            </span>
+            <button class="btn btn-saved-article btn-mark-read">
+              Mark As Read
+            </button>
+            <button class="btn btn-saved-article btn-delete-fav">
+              Delete From Favorites
+            </button>
           </div>
         </div>
       </div>
@@ -46,9 +49,12 @@
             </p>
           </div>
           <div class="saved-article-right-pane">
-            <span id="delete-saved-article-button">
-              <i class="fa-solid fa-trash-can"></i>
-            </span>
+            <button class="btn btn-saved-article btn-mark-read">
+              Mark As Read
+            </button>
+            <button class="btn btn-saved-article btn-delete-fav">
+              Delete From Favorites
+            </button>
           </div>
         </div>
       </div>
@@ -64,55 +70,33 @@
             </p>
           </div>
           <div class="saved-article-right-pane">
-            <span id="delete-saved-article-button">
-              <i class="fa-solid fa-trash-can"></i>
-            </span>
+            <button class="btn btn-saved-article btn-mark-read">
+              Mark As Read
+            </button>
+            <button class="btn btn-saved-article btn-delete-fav">
+              Delete From Favorites
+            </button>
           </div>
         </div>
       </div>
-
-      <!-- <div class="saved-articles-unread">
-        <div class="saved-article unread">
-          <span class="delete-saved-article-button">
-            <i class="fa-solid fa-trash-can"></i
-          ></span>
-          <p class="saved-article-title">Title</p>
-          <p class="saved-article-snippet">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
-            deserunt nemo...
-          </p>
-        </div>
-        <div class="saved-article unread">
-          <span class="delete-saved-article-button">
-            <i class="fa-solid fa-trash-can"></i>
-          </span>
-          <p class="saved-article-title">
-            Example of a long title that breaks into two lines
-          </p>
-          <p class="saved-article-snippet">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
-            deserunt nemo...
-          </p>
-        </div>
-      </div> -->
     </div>
     <div class="page-container">
       <div class="ui-container">
-        <button class="btn-ui btn-search" id="btn-search">
-          <i
-            class="fa-solid fa-magnifying-glass"
-            title="Search for a new article"
-          ></i>
+        <button
+          class="btn btn-ui btn-change-text-size"
+          id="btn-change-text-size"
+        >
+          <i class="fa-solid fa-text-height"></i>
         </button>
         <button
-          class="btn-ui btn-add-remove-fav"
-          data-added-status=""
-          id="btn-add-remove-fav"
+          class="btn btn-ui btn-show-hide-images"
+          id="btn-show-hide-images"
+          title="Show/Hide article images"
         >
-          <!-- dynamically added in JS  -->
+          <i class="fa-solid fa-image"></i>
         </button>
-        <button class="btn-ui btn-show-favs" id="btn-show-favs">
-          <i class="fa-solid fa-star" title="Show your saved Articles"></i>
+        <button class="btn btn-ui btn-show-favs" id="btn-show-favs">
+          <i class="fa-solid fa-star" title="Show your saved articles"></i>
         </button>
       </div>
       <h1 class="article-title">Example Title</h1>
