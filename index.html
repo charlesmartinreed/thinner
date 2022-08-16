@@ -17,67 +17,43 @@
   </head>
   <body>
     <div class="saved-article-container" id="saved-article-container">
-      <h3>Read</h3>
-      <div class="saved-articles-read">
-        <div class="saved-article read">
-          <div class="saved-article-left-pane">
-            <p class="saved-article-title">Title</p>
-            <p class="saved-article-snippet">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
-              deserunt nemo...
-            </p>
-          </div>
-          <div class="saved-article-right-pane">
-            <button class="btn btn-saved-article btn-mark-read">
-              Mark As Read
-            </button>
-            <button class="btn btn-saved-article btn-delete-fav">
-              Delete From Favorites
-            </button>
-          </div>
-        </div>
+      <input
+        class="input-saved-article-search"
+        id="input-saved-article-search"
+        type="text"
+        placeholder="Search for an article"
+        name="q"
+      />
+      <div class="saved-articles-none">
+        <h3>No saved articles</h3>
       </div>
 
-      <h3>Unread</h3>
-      <div class="saved-articles-unread">
-        <div class="saved-article unread">
+      <div class="saved-articles-read">
+        <!-- <h3>Read</h3>
+        <div class="saved-article read">
           <div class="saved-article-left-pane">
-            <p class="saved-article-title">Another Title</p>
-            <p class="saved-article-snippet">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
-              deserunt nemo...
-            </p>
+            <p class="saved-article-title"></p>
+            <p class="saved-article-snippet"></p>
           </div>
           <div class="saved-article-right-pane">
-            <button class="btn btn-saved-article btn-mark-read">
-              Mark As Read
-            </button>
-            <button class="btn btn-saved-article btn-delete-fav">
-              Delete From Favorites
-            </button>
+            <button class="btn btn-saved-article btn-mark-read"></button>
+            <button class="btn btn-saved-article btn-delete-fav"></button>
           </div>
-        </div>
+        </div> -->
       </div>
+
       <div class="saved-articles-unread">
+        <!-- <h3>Unread</h3>
         <div class="saved-article unread">
           <div class="saved-article-left-pane">
-            <p class="saved-article-title">
-              Example of a long title that breaks into two lines
-            </p>
-            <p class="saved-article-snippet">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti,
-              deserunt nemo...
-            </p>
+            <p class="saved-article-title"></p>
+            <p class="saved-article-snippet"></p>
           </div>
           <div class="saved-article-right-pane">
-            <button class="btn btn-saved-article btn-mark-read">
-              Mark As Read
-            </button>
-            <button class="btn btn-saved-article btn-delete-fav">
-              Delete From Favorites
-            </button>
+            <button class="btn btn-saved-article btn-mark-unread"></button>
+            <button class="btn btn-saved-article btn-delete-fav"></button>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="page-container">
@@ -119,40 +95,14 @@
           </button>
         </div>
       </div>
-      <h1 class="article-title">Example Title</h1>
-      <h6 class="article-author">Written by: A Famous Author</h6>
-      <a class="article-link" href="https://duckduckgo.com" target="_blank"
-        >Link to Article</a
-      >
-      <article class="article-body" data-article-read-status="read">
-        <p class="article-graph">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus,
-          suscipit. Nihil ducimus harum sed deserunt distinctio eum deleniti
-          fuga fugiat aperiam, maxime aut ratione repudiandae cumque modi quae
-          commodi animi.
-        </p>
-        <p class="article-graph">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magni,
-          maxime voluptatum quisquam nemo vel laudantium animi reiciendis beatae
-          possimus a similique perferendis autem error pariatur provident libero
-          id eum unde totam? Corporis molestiae ipsam quos ipsa minus, itaque
-          quia recusandae, explicabo dolorem consequatur ipsum officia ab vel
-          laudantium deserunt distinctio soluta sequi. Modi, nostrum odit.
-          Adipisci possimus suscipit blanditiis nam magni ducimus. Cupiditate
-          earum necessitatibus ipsa molestiae quaerat animi eligendi.
-          Repudiandae repellat, quasi odit non possimus dolorum sed.
-        </p>
-        <p class="article-graph">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque
-          cumque dignissimos eligendi earum iste saepe reprehenderit in aperiam
-          unde. Nostrum ab quo inventore ipsum reprehenderit rerum, voluptatem
-          natus temporibus eum repellat reiciendis dolores facere ea, soluta,
-          magnam id quibusdam dolor repellendus? Illo hic nisi beatae pariatur
-          eligendi eos recusandae dolores sapiente aspernatur molestiae
-          praesentium necessitatibus nobis quidem exercitationem perferendis,
-          error minima modi enim?
-        </p>
-      </article>
+      <div class="article-attributions">
+        <h1 class="article-title">Example Title</h1>
+        <h6 class="article-author">Written by: A Famous Author</h6>
+        <a class="article-link" href="https://duckduckgo.com" target="_blank"
+          >Link to Full Article</a
+        >
+      </div>
+      <article class="article-body"></article>
     </div>
   </body>
 </html>

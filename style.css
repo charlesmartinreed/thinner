@@ -24,12 +24,13 @@ body {
 
 .btn-saved-article {
   cursor: pointer;
-  padding: 0.5em;
+  padding: 0.25em;
   outline: none;
   border: none;
   width: 50%;
   border-radius: 2px;
   color: #eee9d9;
+  margin: 8px 0;
 }
 
 .btn-saved-article:last-of-type {
@@ -40,7 +41,8 @@ body {
   filter: sepia(0.4);
 }
 
-.btn-mark-read {
+.btn-mark-read,
+.btn-mark-unread {
   background-color: #1c4059;
 }
 
@@ -98,6 +100,7 @@ body {
 
 .ui-container .btn-ui.active {
   color: #172347;
+  text-shadow: 1px 3px 3px #172347;
   /* transform: scale(1.5); */
 }
 
@@ -115,6 +118,34 @@ body {
   transform-origin: center left;
 }
 
+.saved-articles-none {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background-color: #dad5c5;
+}
+
+.saved-articles-none.visible {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-saved-article-search {
+  outline: none;
+  border: none;
+  /* padding: 1rem; */
+  width: 100%;
+  height: 30px;
+  margin: 12px 0;
+  border-radius: 20px;
+  font-size: 1rem;
+  text-align: center;
+}
+
 .saved-article-container.visible {
   transform: translate(0);
 }
@@ -129,6 +160,7 @@ body {
   font-size: 1.5625rem;
   font-weight: 400;
   padding: 10px 0;
+  border-bottom: 1px solid #000;
 }
 
 .saved-article {
@@ -234,6 +266,7 @@ body {
   transition: 0.3s linear;
   background-color: #cdc3c3;
   padding: 3px 6px;
+  text-transform: uppercase;
 }
 
 .article-link:hover,
@@ -242,10 +275,32 @@ body {
   color: #172347;
 }
 
+.article-body {
+  margin: 1.5rem 0;
+}
+
 .article-graph {
   line-height: 1.8rem;
   margin-top: 1rem;
   font-size: 1rem;
+}
+
+.article-graph .header {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.article-image {
+  max-width: 300px;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 11px;
+  display: none;
+}
+
+.article-image.visible {
+  display: block;
 }
 
 @keyframes shake {
@@ -254,11 +309,11 @@ body {
   }
 
   50% {
-    transform: scale(1.5) rotate(-10deg);
+    transform: scale(1.5) rotate(-5deg);
   }
 
   75% {
-    transform: scale(1.5) rotate(10deg);
+    transform: scale(1.5) rotate(5deg);
   }
 
   100% {
