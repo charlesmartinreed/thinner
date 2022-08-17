@@ -100,7 +100,7 @@ body {
 
 .ui-container .btn-ui.active {
   color: #172347;
-  text-shadow: 1px 3px 3px #172347;
+  text-shadow: 2px 1px 3px #172347;
   /* transform: scale(1.5); */
 }
 
@@ -295,11 +295,7 @@ body {
   max-height: 300px;
   object-fit: cover;
   border-radius: 8px;
-  margin: 11px;
-  display: none;
-}
-
-.article-image.visible {
+  margin: 11px 0;
   display: block;
 }
 

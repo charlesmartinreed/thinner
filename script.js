@@ -6,6 +6,7 @@ const searchBarInput = document.querySelector("#input-saved-article-search");
 const savedArticlesDiv = document.querySelector("#saved-article-container");
 
 // GLOBALS & CONSTANTS
+let imagesAreRendered = true;
 let defaultSizeStr = "small";
 let [defaultSize] = Array.from(changeTextSizeBtns).filter(
   (btn) => btn.getAttribute("data-size") === defaultSizeStr
@@ -27,22 +28,36 @@ const introArticle = {
             <p class="article-graph">
                 It's pretty straightfoward, actually. You can click the <i class="fa-solid fa-plus"></i> button to add this (or any other article) to your favorites. Or you can click the <i class="fa-solid fa-star"></i> to show your current favorites.
             </p>
-            <img class="article-image visible" src="./img/test.gif"></img>
+            <img src="" class="article-image"></img>
             <p class="article-graph">Within the favorites pane, you can then further customize your feed by marking or unmarking favorites as Read or remove them from your collection altogether.</p>
+            <img src="" class="article-image"></img>
             <p class="article-graph">Enjoy! And, if you have any feedback, I'd <a class="article-link" href="mailto:charliesoandso@protonmail.com">love to hear it</a>.</p>
     `,
   snippet:
     "How to Use This App It's pretty straightfoward, actually. You can click the button to add this (or any other article) to your favorites.",
-  imagesVisible: true,
+  imageURLs: ["./img/test.gif", "./img/test2.gif"],
   read: false,
 };
 
 // DUMMY DATA
 let articleList = [introArticle];
+let currentArticle = articleList[0];
 
-showImagesBtn.addEventListener("click", () => handleShowImages());
+showImagesBtn.addEventListener("click", () => {
+  imagesAreRendered = !imagesAreRendered;
+  console.log("current image state is", imagesAreRendered);
+
+  handleShowImages();
+});
+
 showFavsBtn.addEventListener("click", () => handleShowFavs());
 searchBarInput.addEventListener("keydown", (e) => handleSearchInputChanged(e));
+
+window.addEventListener("DOMContentLoaded", () => {
+  handleTextSizeChange(defaultSize);
+  displayArticle(currentArticle);
+  layoutFavoritesList();
+});
 
 // HANDLER FUNCTIONS
 function handleTextSizeChange(button) {
@@ -89,10 +104,6 @@ function handleArticleFetch(url) {
   alert("fetching now");
 }
 
-function handleShowImages() {
-  alert("displaying images now");
-}
-
 function handleShowFavs() {
   savedArticlesDiv.classList.toggle("visible");
   showFavsBtn.classList.toggle("active");
@@ -105,8 +116,28 @@ function checkArticleFavoriteStatus(buttonStatus) {
   return buttonStatus === "added" ? removeIcon : addIcon;
 }
 
+function handleShowImages() {
+  // the presumption here is that the urls will be filled out on the server side, then utilized on the client side
+  let currentImgSrcs = currentArticle.imageURLs.map((url) => url);
+  let currentImages = Array.from(document.querySelectorAll("img"));
+
+  if (imagesAreRendered === true) {
+    showImagesBtn.classList.add("active");
+
+    currentImages.forEach((img, index) =>
+      img.setAttribute("src", currentImgSrcs[index])
+    );
+  }
+
+  if (imagesAreRendered === false) {
+    showImagesBtn.classList.remove("active");
+
+    currentImages.forEach((img, index) => img.setAttribute("src", ""));
+  }
+}
+
 function displayArticle(article) {
-  let { title, author, body, urlLink, imagesVisible, read } = article;
+  let { title, author, body, urlLink, read } = article;
 
   const articleTitle = (document.querySelector(
     ".article-attributions .article-title"
@@ -122,6 +153,9 @@ function displayArticle(article) {
 
   const articleBodyParent = document.querySelector(".article-body");
   articleBodyParent.innerHTML = body;
+
+  currentArticle = article;
+  handleShowImages();
 }
 
 function layoutFavoritesList() {
@@ -131,7 +165,6 @@ function layoutFavoritesList() {
   }
 
   if (articleList.length >= 1) {
-    console.log("drawing favorites now");
     document.querySelector(".saved-articles-none").classList.remove("visible");
 
     let readArticles = articleList.filter((article) => article.read === true);
@@ -172,9 +205,3 @@ function layoutArticlePanel(article) {
     `;
   return html;
 }
-
-window.addEventListener("DOMContentLoaded", () => {
-  handleTextSizeChange(defaultSize);
-  displayArticle(articleList[0]);
-  layoutFavoritesList();
-});
