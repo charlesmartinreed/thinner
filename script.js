@@ -3,6 +3,8 @@ const showImagesBtn = document.querySelector("#btn-show-hide-images");
 const showFavsBtn = document.querySelector("#btn-show-favs");
 const searchBarInput = document.querySelector("#input-saved-article-search");
 
+let markReadStatusBtns;
+
 const savedArticlesDiv = document.querySelector("#saved-article-container");
 
 // GLOBALS & CONSTANTS
@@ -39,8 +41,28 @@ const introArticle = {
   read: false,
 };
 
+let secondArticle = {
+  title: "Another Article",
+  author: "Test Dummy",
+  urlLink: "https://minimum-viable.vercel.app/",
+  body: `
+          <h2 class="article-header">A Gripping, Not-At-All-Clickbaity Title</h2>
+          <p class="article-graph">
+             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non laborum dolorum voluptates quia alias inventore explicabo neque, esse suscipit iste quidem assumenda fugit aperiam maiores magnam quas nemo ad provident!
+          </p>
+          <p class="article-graph">Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus, illum quod amet adipisci tempore, doloremque corporis ratione mollitia a ipsa commodi. Minus aliquam quod natus atque sunt? Cupiditate, pariatur? Illum quod amet adipisci tempore, doloremque corporis ratione mollitia a ipsa commodi. Minus aliquam quod natus atque sunt? Cupiditate, pariatur?</p>
+          
+          <p class="article-graph">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quidem, enim. Minima voluptas quibusdam esse totam optio quae ex commodi repudiandae necessitatibus. Expedita totam ut perspiciatis tempora amet quo ullam. Architecto!</p>
+          <img src="" class="article-image"></img>
+  `,
+  snippet:
+    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non laborum dolorum voluptates",
+  imageURLs: ["./img/test2.gif"],
+  read: true,
+};
+
 // DUMMY DATA
-let articleList = [introArticle];
+let articleList = [introArticle, secondArticle];
 let currentArticle = articleList[0];
 
 showImagesBtn.addEventListener("click", () => {
@@ -160,7 +182,7 @@ function displayArticle(article) {
 
 function layoutFavoritesList() {
   if (articleList.length === 0) {
-    console.log("empty articles");
+    // console.log("empty articles");
     document.querySelector(".saved-articles-none").classList.add("visible");
   }
 
@@ -172,22 +194,56 @@ function layoutFavoritesList() {
       (article) => article.read === false
     );
 
-    let readArticleContainer = document.querySelector(".saved-articles-read");
     let unreadArticleContainer = document.querySelector(
       ".saved-articles-unread"
     );
+    let readArticleContainer = document.querySelector(".saved-articles-read");
+
+    unreadArticleContainer.innerHTML = "";
+    readArticleContainer.innerHTML = "";
+
+    // display unread articles first
+    if (unreadArticles.length === 0)
+      unreadArticleContainer.innerHTML = `<p class="saved-article-snippet" style="text-align: center">You're all caught up!</p>`;
+
+    if (readArticles.length === 0)
+      readArticleContainer.innerHTML = `<p class="saved-article-snippet">You're all caught up!</p>`;
+
+    unreadArticles.forEach((article) => {
+      unreadArticleContainer.innerHTML += layoutArticlePanel(article);
+    });
 
     readArticles.forEach((article) => {
       readArticleContainer.innerHTML += layoutArticlePanel(article);
     });
-    unreadArticles.forEach((article) => {
-      unreadArticleContainer.innerHTML += layoutArticlePanel(article);
-    });
+
+    // add event listeners to the buttons
+    let readArticleBtns = document.querySelectorAll(
+      ".btn-saved-article.btn-mark-unread"
+    );
+
+    let unreadArticleBtns = document.querySelectorAll(
+      ".btn-saved-article.btn-mark-read"
+    );
+
+    readArticleBtns.forEach((btn) =>
+      btn.addEventListener("click", () =>
+        handleReadStatusChange(btn.getAttribute("data-article"))
+      )
+    );
+
+    unreadArticleBtns.forEach((btn) =>
+      btn.addEventListener("click", () =>
+        handleReadStatusChange(btn.getAttribute("data-article"))
+      )
+    );
   }
 }
 
 function layoutArticlePanel(article) {
   let { read: readStatus } = article;
+  //   console.log("laid out title is", article.title);
+
   let buttonStatusStr = readStatus === true ? "unread" : "read";
   let html = `
     <div class="saved-article ${buttonStatusStr}">
@@ -198,10 +254,19 @@ function layoutArticlePanel(article) {
         </p>
       </div>
       <div class="saved-article-right-pane">
-        <button class="btn btn-saved-article btn-mark-${buttonStatusStr}">Mark as ${buttonStatusStr}</button>
-        <button class="btn btn-saved-article btn-delete-fav">Remove From Favorites</button>
+        <button data-article="${article.title}" class="btn btn-saved-article btn-mark-${buttonStatusStr}">Mark as ${buttonStatusStr}</button>
+        <button data-article="${article.title}" class="btn btn-saved-article btn-delete-fav">Remove From Favorites</button>
       </div>
     </div>
     `;
+
   return html;
+}
+
+function handleReadStatusChange(articlePane) {
+  // find the article that matches
+  let [result] = articleList.filter((article) => article.title === articlePane);
+  result.read = !result.read;
+  console.log(articleList);
+  layoutFavoritesList();
 }
