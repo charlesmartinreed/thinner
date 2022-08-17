@@ -63,7 +63,7 @@ let secondArticle = {
 
 // DUMMY DATA
 let articleList = [introArticle, secondArticle];
-let currentArticle = articleList[0];
+let currentArticle = articleList[1];
 
 showImagesBtn.addEventListener("click", () => {
   imagesAreRendered = !imagesAreRendered;
@@ -76,10 +76,14 @@ showFavsBtn.addEventListener("click", () => handleShowFavs());
 searchBarInput.addEventListener("keydown", (e) => handleSearchInputChanged(e));
 
 window.addEventListener("DOMContentLoaded", () => {
+  init();
+});
+
+const init = () => {
   handleTextSizeChange(defaultSize);
   displayArticle(currentArticle);
   layoutFavoritesList();
-});
+};
 
 // HANDLER FUNCTIONS
 function handleTextSizeChange(button) {
@@ -159,6 +163,19 @@ function handleShowImages() {
 }
 
 function displayArticle(article) {
+  if (article === null) {
+    let elements = document.querySelector(".article-attributions").childNodes;
+
+    elements.forEach((element) => (element.innerHTML = ""));
+    let link = document.querySelector(".article-attributions a");
+    link.style = "display: none";
+
+    document.querySelector(".article-body").innerHTML = `
+    <h1 class="no-article-loaded">Let's get reading!</h1>
+    `;
+    return;
+  }
+
   let { title, author, body, urlLink, read } = article;
 
   const articleTitle = (document.querySelector(
@@ -169,14 +186,13 @@ function displayArticle(article) {
     ".article-attributions .article-author"
   ).innerHTML = author);
 
-  const articleLink = (document.querySelector(
-    ".article-attributions .article-link"
-  ).href = urlLink);
+  let articleLink = document.querySelector(".article-attributions a");
+  articleLink.href = urlLink;
+  articleLink.classList.add("article-link");
+  articleLink.innerHTML = "Link to Article";
 
   const articleBodyParent = document.querySelector(".article-body");
   articleBodyParent.innerHTML = body;
-
-  currentArticle = article;
   handleShowImages();
 }
 
@@ -202,12 +218,13 @@ function layoutFavoritesList() {
     unreadArticleContainer.innerHTML = "";
     readArticleContainer.innerHTML = "";
 
-    // display unread articles first
     if (unreadArticles.length === 0)
       unreadArticleContainer.innerHTML = `<p class="saved-article-snippet" style="text-align: center">You're all caught up!</p>`;
 
     if (readArticles.length === 0)
-      readArticleContainer.innerHTML = `<p class="saved-article-snippet">You're all caught up!</p>`;
+      readArticleContainer.innerHTML = `<p class="saved-article-snippet" style="text-align: center">You're all caught up!</p>`;
+
+    // display unread articles first
 
     unreadArticles.forEach((article) => {
       unreadArticleContainer.innerHTML += layoutArticlePanel(article);
@@ -218,23 +235,33 @@ function layoutFavoritesList() {
     });
 
     // add event listeners to the buttons
-    let readArticleBtns = document.querySelectorAll(
+    let markUnreadButtons = document.querySelectorAll(
       ".btn-saved-article.btn-mark-unread"
     );
 
-    let unreadArticleBtns = document.querySelectorAll(
+    let markReadButtons = document.querySelectorAll(
       ".btn-saved-article.btn-mark-read"
     );
 
-    readArticleBtns.forEach((btn) =>
+    let deleteButtons = document.querySelectorAll(
+      ".btn-saved-article.btn-delete-fav"
+    );
+
+    markUnreadButtons.forEach((btn) =>
       btn.addEventListener("click", () =>
         handleReadStatusChange(btn.getAttribute("data-article"))
       )
     );
 
-    unreadArticleBtns.forEach((btn) =>
+    markReadButtons.forEach((btn) =>
       btn.addEventListener("click", () =>
         handleReadStatusChange(btn.getAttribute("data-article"))
+      )
+    );
+
+    deleteButtons.forEach((btn) =>
+      btn.addEventListener("click", () =>
+        handleDeleteArticle(btn.getAttribute("data-article"))
       )
     );
   }
@@ -263,10 +290,34 @@ function layoutArticlePanel(article) {
   return html;
 }
 
-function handleReadStatusChange(articlePane) {
+function handleReadStatusChange(articleIdentifier) {
   // find the article that matches
-  let [result] = articleList.filter((article) => article.title === articlePane);
+  let [result] = articleList.filter(
+    (article) => article.title === articleIdentifier
+  );
   result.read = !result.read;
   console.log(articleList);
   layoutFavoritesList();
+}
+
+function handleDeleteArticle(articleIdentifier) {
+  console.log(articleIdentifier);
+  let pulledIndex;
+  articleList = articleList.filter((article, index) => {
+    pulledIndex = index;
+    return article.title !== articleIdentifier;
+  });
+
+  currentArticle =
+    articleList[pulledIndex + 1] ?? articleList[[pulledIndex - 1]] ?? null;
+
+  //   init();
+
+  console.log("removed index", pulledIndex);
+  console.log("updated article list", articleList);
+  console.log(currentArticle);
+  //   currentArticle = articleList[pulledIndex + 1] ?? null;
+
+  layoutFavoritesList();
+  displayArticle(currentArticle);
 }
