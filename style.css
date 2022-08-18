@@ -6,6 +6,8 @@
 
 :root {
   --font-size-default: 16;
+  --color-dark-mode-body-bg: #293045;
+  --color-light-mode-body-bg: #eee9d9;
   font-size: var(--font-size-default);
 }
 

@@ -178,6 +178,11 @@ function displayArticle(article) {
 
   let { title, author, body, urlLink, read } = article;
 
+  //   MIGHT CHANGE THIS BEHAVIOR IN THE FUTURE
+  // UNDECIDED IF SIMPLY OPENING AN ARTICLE SHOULD ALSO MARK IT AS READ
+  //   CONSIDER MARKING IT IF A CERTAIN AMOUNT IS READ, BY CHECKING THE PAGE SCROLL?
+  //   article.read = true;
+
   const articleTitle = (document.querySelector(
     ".article-attributions .article-title"
   ).innerHTML = title);
@@ -193,6 +198,9 @@ function displayArticle(article) {
 
   const articleBodyParent = document.querySelector(".article-body");
   articleBodyParent.innerHTML = body;
+
+  currentArticle = article;
+
   handleShowImages();
 }
 
@@ -250,9 +258,9 @@ function layoutFavoritesList() {
     );
 
     articlePanes.forEach((pane) =>
-      pane.addEventListener("click", () => {
+      pane.addEventListener("click", (e) => {
         let articleID = pane.getAttribute("data-article-id");
-        articlePaneClicked(articleID);
+        articlePaneClicked(e.target, articleID);
       })
     );
 
@@ -303,10 +311,10 @@ function layoutArticlePanel(article) {
 function handleReadStatusChange(articleIdentifier) {
   // find the article that matches
   let [result] = articleList.filter(
-    (article) => article.title === articleIdentifier
+    (article) => article.id === articleIdentifier
   );
+
   result.read = !result.read;
-  console.log(articleList);
   layoutFavoritesList();
 }
 
@@ -332,8 +340,29 @@ function handleDeleteArticle(articleIdentifier) {
   displayArticle(currentArticle);
 }
 
-function articlePaneClicked(articleID) {
-  let [article] = articleList.filter((article) => article.id === articleID);
-  currentArticle = article;
-  displayArticle(currentArticle);
+function articlePaneClicked(target, articleID) {
+  if (
+    target.classList.contains("btn-mark-unread") ||
+    target.classList.contains("btn-mark-read")
+  ) {
+    handleReadStatusChange(articleID);
+    return;
+  }
+
+  if (target.parentElement.classList.contains("saved-article-left-pane")) {
+    let [article] = articleList.filter((article) => article.id === articleID);
+    currentArticle = article;
+    displayArticle(currentArticle);
+  }
+
+  //   console.log(target.parentElement);
+  //   let [article] = articleList.filter((article) => article.id === articleID);
+  //   currentArticle = article;
+
+  //   handleReadStatusChange(article.title);
+  //   if (article.read === false) {
+  //     handleReadStatusChange(article.title);
+  //   }
+
+  //   console.log("pane clicked, marked as read");
 }
