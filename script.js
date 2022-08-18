@@ -69,10 +69,7 @@ changeTextSizeBtns.forEach((btn) =>
   )
 );
 
-showImagesBtn.addEventListener("click", () => {
-  imagesAreRendered = !imagesAreRendered;
-  console.log("current image state is", imagesAreRendered);
-
+showImagesBtn.addEventListener("click", (e) => {
   handleShowImages();
 });
 
@@ -197,11 +194,17 @@ function checkArticleFavoriteStatus(buttonStatus) {
 
 function handleShowImages() {
   // the presumption here is that the urls will be filled out on the server side, then utilized on the client side
+
+  imagesAreRendered === true
+    ? showImagesBtn.classList.add("active")
+    : showImagesBtn.classList.remove("active");
+
   let currentImgSrcs = currentArticle.imageURLs.map((url) => url);
+
   let currentImages = Array.from(document.querySelectorAll("img"));
 
   if (imagesAreRendered === true) {
-    showImagesBtn.classList.add("active");
+    // showImagesBtn.classList.add("active");
 
     currentImages.forEach((img, index) =>
       img.setAttribute("src", currentImgSrcs[index])
@@ -209,10 +212,13 @@ function handleShowImages() {
   }
 
   if (imagesAreRendered === false) {
-    showImagesBtn.classList.remove("active");
+    // showImagesBtn.classList.remove("active");
 
     currentImages.forEach((img, index) => img.setAttribute("src", ""));
   }
+
+  imagesAreRendered = !imagesAreRendered;
+  console.log("images are rendered", showImagesBtn.classList);
 }
 
 function displayArticle(article) {
