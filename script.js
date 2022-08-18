@@ -2,21 +2,16 @@ const changeTextSizeBtns = document.querySelectorAll(".btn-change-text-size");
 const showImagesBtn = document.querySelector("#btn-show-hide-images");
 const showFavsBtn = document.querySelector("#btn-show-favs");
 const searchBarInput = document.querySelector("#input-saved-article-search");
+const darkModeToggleBtn = document.querySelector("#btn-toggle-dark-mode");
 
 const savedArticlesDiv = document.querySelector("#saved-article-container");
 
 // GLOBALS & CONSTANTS
 let imagesAreRendered = true;
+let darkModeIsActive = false;
 let defaultSizeStr = "small";
 let [defaultSize] = Array.from(changeTextSizeBtns).filter(
   (btn) => btn.getAttribute("data-size") === defaultSizeStr
-);
-
-// EVENT LISTENERS
-changeTextSizeBtns.forEach((btn) =>
-  btn.addEventListener("click", (e) =>
-    handleTextSizeChange(e.target.parentElement)
-  )
 );
 
 const introArticle = {
@@ -65,6 +60,15 @@ let secondArticle = {
 let articleList = [introArticle, secondArticle];
 let currentArticle = articleList[1];
 
+// EVENT LISTENERS
+darkModeToggleBtn.addEventListener("click", (e) => handleDarkModeToggle(e));
+
+changeTextSizeBtns.forEach((btn) =>
+  btn.addEventListener("click", (e) =>
+    handleTextSizeChange(e.target.parentElement)
+  )
+);
+
 showImagesBtn.addEventListener("click", () => {
   imagesAreRendered = !imagesAreRendered;
   console.log("current image state is", imagesAreRendered);
@@ -80,12 +84,61 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const init = () => {
+  handleDarkModeToggle();
   handleTextSizeChange(defaultSize);
   displayArticle(currentArticle);
   layoutFavoritesList();
 };
 
 // HANDLER FUNCTIONS
+const handleDarkModeToggle = (e = null) => {
+  if (e) {
+    darkModeIsActive = !darkModeIsActive;
+    console.log("dark mode toggled, constant changed");
+  }
+
+  if (darkModeIsActive) {
+    darkModeToggleBtn.classList.add("active");
+  } else {
+    darkModeToggleBtn.classList.remove("active");
+  }
+
+  let htmlElement = window.getComputedStyle(document.querySelector("html"));
+
+  let bgColor;
+  let textColor;
+  let savedArticlesContainerColor;
+
+  if (darkModeIsActive) {
+    bgColor = htmlElement.getPropertyValue("--color-dark-mode-body-bg");
+    textColor = htmlElement.getPropertyValue("--color-dark-mode-text-color");
+    savedArticlesContainerColor = htmlElement.getPropertyValue(
+      "--color-dark-mode-saved-articles-container-bg-color"
+    );
+  }
+
+  if (!darkModeIsActive) {
+    bgColor = htmlElement.getPropertyValue("--color-light-mode-body-bg");
+    textColor = htmlElement.getPropertyValue("--color-light-mode-text-color");
+    savedArticlesContainerColor = htmlElement.getPropertyValue(
+      "--color-light-mode-saved-articles-container-bg-color"
+    );
+  }
+
+  document.documentElement.style.setProperty(
+    "--bg-color-default",
+    `${bgColor}`
+  );
+  document.documentElement.style.setProperty(
+    "--font-color-default",
+    `${textColor}`
+  );
+  document.documentElement.style.setProperty(
+    "--bg-color-saved-articles-default",
+    `${savedArticlesContainerColor}`
+  );
+};
+
 function handleTextSizeChange(button) {
   let size = button.getAttribute("data-size");
   toggleButtonState(button);
