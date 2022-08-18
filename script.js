@@ -3,8 +3,6 @@ const showImagesBtn = document.querySelector("#btn-show-hide-images");
 const showFavsBtn = document.querySelector("#btn-show-favs");
 const searchBarInput = document.querySelector("#input-saved-article-search");
 
-let markReadStatusBtns;
-
 const savedArticlesDiv = document.querySelector("#saved-article-container");
 
 // GLOBALS & CONSTANTS
@@ -22,6 +20,7 @@ changeTextSizeBtns.forEach((btn) =>
 );
 
 const introArticle = {
+  id: "a8eglaeoq761",
   title: "Welcome to Thinner!",
   author: "Charles Martin Reed",
   urlLink: "https://minimum-viable.vercel.app/",
@@ -42,6 +41,7 @@ const introArticle = {
 };
 
 let secondArticle = {
+  id: "z86MOaDo87cP",
   title: "Another Article",
   author: "Test Dummy",
   urlLink: "https://minimum-viable.vercel.app/",
@@ -235,6 +235,8 @@ function layoutFavoritesList() {
     });
 
     // add event listeners to the buttons
+    let articlePanes = document.querySelectorAll(".saved-article");
+
     let markUnreadButtons = document.querySelectorAll(
       ".btn-saved-article.btn-mark-unread"
     );
@@ -245,6 +247,13 @@ function layoutFavoritesList() {
 
     let deleteButtons = document.querySelectorAll(
       ".btn-saved-article.btn-delete-fav"
+    );
+
+    articlePanes.forEach((pane) =>
+      pane.addEventListener("click", () => {
+        let articleID = pane.getAttribute("data-article-id");
+        articlePaneClicked(articleID);
+      })
     );
 
     markUnreadButtons.forEach((btn) =>
@@ -272,8 +281,9 @@ function layoutArticlePanel(article) {
   //   console.log("laid out title is", article.title);
 
   let buttonStatusStr = readStatus === true ? "unread" : "read";
+
   let html = `
-    <div class="saved-article ${buttonStatusStr}">
+    <div class="saved-article ${buttonStatusStr}" data-article-id=${article.id}>
       <div class="saved-article-left-pane">
         <p class="saved-article-title">${article.title}</p>
         <p class="saved-article-snippet">
@@ -319,5 +329,11 @@ function handleDeleteArticle(articleIdentifier) {
   //   currentArticle = articleList[pulledIndex + 1] ?? null;
 
   layoutFavoritesList();
+  displayArticle(currentArticle);
+}
+
+function articlePaneClicked(articleID) {
+  let [article] = articleList.filter((article) => article.id === articleID);
+  currentArticle = article;
   displayArticle(currentArticle);
 }
