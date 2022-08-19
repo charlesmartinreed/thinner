@@ -1,5 +1,6 @@
 const changeTextSizeBtns = document.querySelectorAll(".btn-change-text-size");
 const showImagesBtn = document.querySelector("#btn-show-hide-images");
+const closeFavsMobileBtn = document.querySelector("#btn-close-favs-mobile");
 const showFavsBtn = document.querySelector("#btn-show-favs");
 const searchBarInput = document.querySelector("#input-saved-article-search");
 const darkModeToggleBtn = document.querySelector("#btn-toggle-dark-mode");
@@ -7,6 +8,7 @@ const darkModeToggleBtn = document.querySelector("#btn-toggle-dark-mode");
 const savedArticlesDiv = document.querySelector("#saved-article-container");
 
 // GLOBALS & CONSTANTS
+let clientIsMobileDisplay;
 let imagesAreRendered = true;
 let darkModeIsActive = false;
 let defaultSizeStr = "small";
@@ -70,10 +72,14 @@ changeTextSizeBtns.forEach((btn) =>
 );
 
 showImagesBtn.addEventListener("click", (e) => {
+  imagesAreRendered = !imagesAreRendered;
+  showImagesBtn.classList.toggle("active");
+
   handleShowImages();
 });
 
 showFavsBtn.addEventListener("click", () => handleShowFavs());
+closeFavsMobileBtn.addEventListener("click", () => handleShowFavs());
 searchBarInput.addEventListener("keydown", (e) => handleSearchInputChanged(e));
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -81,10 +87,20 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const init = () => {
+  clientIsMobileDisplay = checkClientDisplayIsMobile();
+
+  imagesAreRendered === true
+    ? showImagesBtn.classList.add("active")
+    : showImagesBtn.classList.remove("active");
+
   handleDarkModeToggle();
   handleTextSizeChange(defaultSize);
   displayArticle(currentArticle);
   layoutFavoritesList();
+};
+
+const checkClientDisplayIsMobile = () => {
+  return window.innerWidth <= 425;
 };
 
 // HANDLER FUNCTIONS
@@ -194,11 +210,6 @@ function checkArticleFavoriteStatus(buttonStatus) {
 
 function handleShowImages() {
   // the presumption here is that the urls will be filled out on the server side, then utilized on the client side
-
-  imagesAreRendered === true
-    ? showImagesBtn.classList.add("active")
-    : showImagesBtn.classList.remove("active");
-
   let currentImgSrcs = currentArticle.imageURLs.map((url) => url);
 
   let currentImages = Array.from(document.querySelectorAll("img"));
@@ -217,7 +228,6 @@ function handleShowImages() {
     currentImages.forEach((img, index) => img.setAttribute("src", ""));
   }
 
-  imagesAreRendered = !imagesAreRendered;
   console.log("images are rendered", showImagesBtn.classList);
 }
 
@@ -411,7 +421,14 @@ function articlePaneClicked(target, articleID) {
   if (target.parentElement.classList.contains("saved-article-left-pane")) {
     let [article] = articleList.filter((article) => article.id === articleID);
     currentArticle = article;
+
     displayArticle(currentArticle);
+
+    // as the panes can only be clicked by user when the favs is open
+    // triggering the toggle as well on mobile will avoid the user having to click the close button after choosing a new article
+    if (clientIsMobileDisplay === true) {
+      handleShowFavs();
+    }
   }
 
   //   console.log(target.parentElement);
