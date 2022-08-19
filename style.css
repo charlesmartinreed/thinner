@@ -213,9 +213,6 @@ body {
   transition: 0.25s ease-in-out;
 }
 
-.saved-article-left-pane {
-}
-
 .saved-article-right-pane {
   display: flex;
 }
@@ -381,13 +378,16 @@ body {
   .saved-article-container #btn-close-favs-mobile {
     display: block;
     margin: auto;
-    min-height: 30px;
-    min-width: 30px;
-    border-radius: 50%;
-    border: 2px solid #c8243a;
-    background-color: transparent;
-    color: #c8243a;
+    height: 25px;
+    width: 50px;
+    border-radius: 15px;
+    /* border: 2px solid #c8243a; */
+    border: none;
+    background-color: var(--font-color-default);
+    color: var(--bg-color-default);
+    /* color: #d8d3c2; */
     font-weight: 800;
+    font-size: 14px;
     outline: none;
   }
 }

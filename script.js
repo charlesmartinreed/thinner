@@ -96,7 +96,7 @@ const init = () => {
   handleDarkModeToggle();
   handleTextSizeChange(defaultSize);
   displayArticle(currentArticle);
-  layoutFavoritesList();
+  layoutFavoritesList(articleList);
 };
 
 const checkClientDisplayIsMobile = () => {
@@ -176,9 +176,41 @@ function handleTextSizeChange(button) {
 }
 
 function handleSearchInputChanged(e) {
-  // attempting to exclude simple things like 'the', 'a', 'an' in titles
-  if (e.target.value.length > 4) {
-    console.log(e.target.value);
+  let searchInputText;
+
+  let filteredArticles = articleList.filter(
+    (article) => checkForMatch(article) === true
+  );
+
+  function checkForMatch(articleObject) {
+    let articleTitleWords = articleObject.title.toLowerCase();
+    searchInputText = e.target.value.toLowerCase();
+
+    let inputTextLen = searchInputText.length;
+    console.log("search text len is", searchInputText.length);
+
+    let matched = false;
+    let startPoint = articleTitleWords.indexOf(searchInputText.slice(0));
+
+    if (startPoint !== -1) {
+      for (
+        let i = startPoint;
+        i < articleTitleWords.length - inputTextLen;
+        i++
+      ) {
+        let titleSliceStr = articleTitleWords.slice(i, i + inputTextLen);
+        if (titleSliceStr === searchInputText) {
+          matched = true;
+        }
+      }
+    }
+    return matched;
+  }
+
+  if (filteredArticles.length > 0) {
+    layoutFavoritesList(filteredArticles);
+  } else {
+    layoutFavoritesList(articleList);
   }
 }
 
@@ -273,19 +305,17 @@ function displayArticle(article) {
   handleShowImages();
 }
 
-function layoutFavoritesList() {
-  if (articleList.length === 0) {
+function layoutFavoritesList(list) {
+  if (list.length === 0) {
     // console.log("empty articles");
     document.querySelector(".saved-articles-none").classList.add("visible");
   }
 
-  if (articleList.length >= 1) {
+  if (list.length >= 1) {
     document.querySelector(".saved-articles-none").classList.remove("visible");
 
-    let readArticles = articleList.filter((article) => article.read === true);
-    let unreadArticles = articleList.filter(
-      (article) => article.read === false
-    );
+    let readArticles = list.filter((article) => article.read === true);
+    let unreadArticles = list.filter((article) => article.read === false);
 
     let unreadArticleContainer = document.querySelector(
       ".saved-articles-unread"
@@ -384,12 +414,13 @@ function handleReadStatusChange(articleIdentifier) {
   );
 
   result.read = !result.read;
-  layoutFavoritesList();
+  layoutFavoritesList(articleList);
 }
 
 function handleDeleteArticle(articleIdentifier) {
   console.log(articleIdentifier);
   let pulledIndex;
+
   articleList = articleList.filter((article, index) => {
     pulledIndex = index;
     return article.title !== articleIdentifier;
@@ -405,7 +436,7 @@ function handleDeleteArticle(articleIdentifier) {
   console.log(currentArticle);
   //   currentArticle = articleList[pulledIndex + 1] ?? null;
 
-  layoutFavoritesList();
+  layoutFavoritesList(articleList);
   displayArticle(currentArticle);
 }
 
