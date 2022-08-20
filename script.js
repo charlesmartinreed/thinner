@@ -1,3 +1,5 @@
+import { readFromLocalStorage, writeToLocalStorage } from "./scripts/utils.js";
+
 const changeTextSizeBtns = document.querySelectorAll(".btn-change-text-size");
 const showImagesBtn = document.querySelector("#btn-show-hide-images");
 const closeFavsMobileBtn = document.querySelector("#btn-close-favs-mobile");
@@ -10,7 +12,7 @@ const savedArticlesDiv = document.querySelector("#saved-article-container");
 // GLOBALS & CONSTANTS
 let clientIsMobileDisplay;
 let imagesAreRendered = true;
-let darkModeIsActive = false;
+
 let defaultSizeStr = "small";
 let [defaultSize] = Array.from(changeTextSizeBtns).filter(
   (btn) => btn.getAttribute("data-size") === defaultSizeStr
@@ -87,6 +89,11 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const init = () => {
+  const defaults = { "dark-mode-enabled": false };
+
+  writeDefaults(defaults);
+  let appState = fetchStoredState(defaults);
+
   window.matchMedia("(max-width: 425px)").addEventListener("change", (e) => {
     clientIsMobileDisplay = e.matches;
     console.log("match changed", e.matches, clientIsMobileDisplay);
@@ -96,50 +103,67 @@ const init = () => {
     ? showImagesBtn.classList.add("active")
     : showImagesBtn.classList.remove("active");
 
-  handleDarkModeToggle();
+  activateDarkMode(appState["dark-mode-enabled"]);
+  console.log(appState["dark-mode-enabled"]);
+
   handleTextSizeChange(defaultSize);
   displayArticle(currentArticle);
   layoutFavoritesList(articleList);
 };
 
-// const checkClientDisplayIsMobile = () => {
-//   return window.innerWidth <= 425;
-// };
+const writeDefaults = (defaultValues) => {
+  for (let key of Object.keys(defaultValues)) {
+    for (let value of Object.values(defaultValues)) {
+      if (readFromLocalStorage(key) === null) {
+        writeToLocalStorage(key, value);
+      }
+    }
+  }
+};
+
+const fetchStoredState = (defaultValues) => {
+  let stateObj = Object.create(null);
+  for (let key of Object.keys(defaultValues)) {
+    for (let value of Object.values(defaultValues)) {
+      stateObj[key] = readFromLocalStorage(key);
+    }
+  }
+  return stateObj;
+};
 
 // HANDLER FUNCTIONS
-const handleDarkModeToggle = (e = null) => {
-  if (e) {
-    darkModeIsActive = !darkModeIsActive;
-    console.log("dark mode toggled, constant changed");
-  }
+const handleDarkModeToggle = (e) => {
+  let prevState = readFromLocalStorage("dark-mode-enabled");
+  let newState = !prevState;
 
-  if (darkModeIsActive) {
-    darkModeToggleBtn.classList.add("active");
-  } else {
-    darkModeToggleBtn.classList.remove("active");
-  }
+  writeToLocalStorage("dark-mode-enabled", newState);
+  activateDarkMode(newState);
+};
 
-  let htmlElement = window.getComputedStyle(document.querySelector("html"));
-
+const activateDarkMode = (state) => {
   let bgColor;
   let textColor;
   let savedArticlesContainerColor;
+  let htmlElement = window.getComputedStyle(document.querySelector("html"));
 
-  if (darkModeIsActive) {
-    bgColor = htmlElement.getPropertyValue("--color-dark-mode-body-bg");
-    textColor = htmlElement.getPropertyValue("--color-dark-mode-text-color");
-    savedArticlesContainerColor = htmlElement.getPropertyValue(
-      "--color-dark-mode-saved-articles-container-bg-color"
-    );
-  }
+  darkModeToggleBtn.classList.toggle("active", state === true);
 
-  if (!darkModeIsActive) {
-    bgColor = htmlElement.getPropertyValue("--color-light-mode-body-bg");
-    textColor = htmlElement.getPropertyValue("--color-light-mode-text-color");
-    savedArticlesContainerColor = htmlElement.getPropertyValue(
-      "--color-light-mode-saved-articles-container-bg-color"
-    );
-  }
+  bgColor =
+    state === true
+      ? htmlElement.getPropertyValue("--color-dark-mode-body-bg")
+      : htmlElement.getPropertyValue("--color-light-mode-body-bg");
+  textColor =
+    state === true
+      ? htmlElement.getPropertyValue("--color-dark-mode-text-color")
+      : htmlElement.getPropertyValue("--color-light-mode-text-color");
+  savedArticlesContainerColor =
+    state === true
+      ? htmlElement.getPropertyValue(
+          "--color-dark-mode-saved-articles-container-bg-color"
+        )
+      : htmlElement.getPropertyValue(
+          "--color-light-mode-saved-articles-container-bg-color"
+        );
 
   document.documentElement.style.setProperty(
     "--bg-color-default",
