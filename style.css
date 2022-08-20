@@ -391,3 +391,29 @@ body {
     outline: none;
   }
 }
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-color-default: var(--color-light-mode-body-bg);
+    --font-color-default: var(--color-light-mode-text-color);
+    --bg-color-saved-articles-default: var(
+      --color-light-mode-saved-articles-container-bg-color
+    );
+
+    background-color: var(--bg-color-default);
+    color: var(--font-color-default);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color-default: var(--color-dark-mode-body-bg);
+    --font-color-default: var(--color-dark-mode-text-color);
+    --bg-color-saved-articles-default: var(
+      --color-dark-mode-saved-articles-container-bg-color
+    );
+
+    background-color: var(--bg-color-default);
+    color: var(--font-color-default);
+  }
+}

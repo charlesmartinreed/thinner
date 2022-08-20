@@ -87,7 +87,10 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const init = () => {
-  clientIsMobileDisplay = checkClientDisplayIsMobile();
+  window.matchMedia("(max-width: 425px)").addEventListener("change", (e) => {
+    clientIsMobileDisplay = e.matches;
+    console.log("match changed", e.matches, clientIsMobileDisplay);
+  });
 
   imagesAreRendered === true
     ? showImagesBtn.classList.add("active")
@@ -99,9 +102,9 @@ const init = () => {
   layoutFavoritesList(articleList);
 };
 
-const checkClientDisplayIsMobile = () => {
-  return window.innerWidth <= 425;
-};
+// const checkClientDisplayIsMobile = () => {
+//   return window.innerWidth <= 425;
+// };
 
 // HANDLER FUNCTIONS
 const handleDarkModeToggle = (e = null) => {
