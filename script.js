@@ -11,7 +11,7 @@ const savedArticlesDiv = document.querySelector("#saved-article-container");
 
 // GLOBALS & CONSTANTS
 let clientIsMobileDisplay;
-let imagesAreRendered = true;
+let appState;
 
 let defaultSizeStr = "small";
 let [defaultSize] = Array.from(changeTextSizeBtns).filter(
@@ -89,58 +89,81 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const init = () => {
-  const defaults = { "dark-mode-enabled": false };
+  // defaults needed
+  // dark mode
+  // images visible
+  // font size
+  // article list
 
-  writeDefaults(defaults);
-  let appState = fetchStoredState(defaults);
+  const defaultState = {
+    "thinner-initialized": true,
+    "dark-mode-enabled": false,
+    "images-are-rendered": true,
+    "current-font-size": "small",
+    "saved-articles-list": [],
+  };
+
+  appState = fetchStoredState();
+
+  if (appState === null) {
+    console.log("writing default state");
+    appState = writeStateToLocalStorage(defaultState);
+  } else {
+    console.log("state is already written");
+  }
 
   window.matchMedia("(max-width: 425px)").addEventListener("change", (e) => {
     clientIsMobileDisplay = e.matches;
     console.log("match changed", e.matches, clientIsMobileDisplay);
   });
 
-  imagesAreRendered === true
-    ? showImagesBtn.classList.add("active")
-    : showImagesBtn.classList.remove("active");
-
-  activateDarkMode(appState["dark-mode-enabled"]);
-  console.log(appState["dark-mode-enabled"]);
+  activateDarkMode();
 
   handleTextSizeChange(defaultSize);
   displayArticle(currentArticle);
   layoutFavoritesList(articleList);
 };
 
-const writeDefaults = (defaultValues) => {
-  for (let key of Object.keys(defaultValues)) {
-    for (let value of Object.values(defaultValues)) {
-      if (readFromLocalStorage(key) === null) {
-        writeToLocalStorage(key, value);
-      }
-    }
+const writeStateToLocalStorage = (stateObject) => {
+  for (let key of Object.keys(stateObject)) {
+    console.log("writing key", key);
+    writeToLocalStorage(key, stateObject[key]);
   }
 };
 
-const fetchStoredState = (defaultValues) => {
-  let stateObj = Object.create(null);
-  for (let key of Object.keys(defaultValues)) {
-    for (let value of Object.values(defaultValues)) {
-      stateObj[key] = readFromLocalStorage(key);
+const fetchStoredState = () => {
+  let currentStateObj = Object.create(null);
+
+  if (readFromLocalStorage("thinner-initialized") === true) {
+    for (let key of Object.keys(window.localStorage)) {
+      console.log("fetching state for key", key);
+      currentStateObj[key] = readFromLocalStorage(key);
     }
+  } else {
+    return null;
   }
-  return stateObj;
+
+  return currentStateObj;
+};
+
+const updateCurrentState = (updatedStateObj) => {
+  writeStateToLocalStorage(updatedStateObj);
+  appState = fetchStoredState();
 };
 
 // HANDLER FUNCTIONS
 const handleDarkModeToggle = (e) => {
-  let prevState = readFromLocalStorage("dark-mode-enabled");
-  let newState = !prevState;
+  let currentStateObj = fetchStoredState();
+  currentStateObj["dark-mode-enabled"] = !currentStateObj["dark-mode-enabled"];
 
-  writeToLocalStorage("dark-mode-enabled", newState);
-  activateDarkMode(newState);
+  updateCurrentState(currentStateObj);
+
+  activateDarkMode();
 };
 
-const activateDarkMode = (state) => {
+const activateDarkMode = () => {
+  let state = appState["dark-mode-enabled"];
+
   let bgColor;
   let textColor;
   let savedArticlesContainerColor;
@@ -181,6 +204,7 @@ const activateDarkMode = (state) => {
 
 function handleTextSizeChange(button) {
   let size = button.getAttribute("data-size");
+
   toggleButtonState(button);
   let newSize;
 
@@ -202,6 +226,9 @@ function handleTextSizeChange(button) {
   );
 }
 
+const changeButtonSize = () => {
+
+}
 function handleSearchInputChanged(e) {
   let searchInputText;
 
@@ -270,12 +297,10 @@ function checkArticleFavoriteStatus(buttonStatus) {
 function handleShowImages() {
   // the presumption here is that the urls will be filled out on the server side, then utilized on the client side
   let currentImgSrcs = currentArticle.imageURLs.map((url) => url);
-
   let currentImages = Array.from(document.querySelectorAll("img"));
+  let imagesAreRendered = appState["images-are-rendered"];
 
   if (imagesAreRendered === true) {
-    // showImagesBtn.classList.add("active");
-
     currentImages.forEach((img, index) =>
       img.setAttribute("src", currentImgSrcs[index])
     );
