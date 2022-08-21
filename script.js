@@ -13,11 +13,6 @@ const savedArticlesDiv = document.querySelector("#saved-article-container");
 let clientIsMobileDisplay;
 let appState;
 
-let defaultSizeStr = "small";
-let [defaultSize] = Array.from(changeTextSizeBtns).filter(
-  (btn) => btn.getAttribute("data-size") === defaultSizeStr
-);
-
 const introArticle = {
   id: "a8eglaeoq761",
   title: "Welcome to Thinner!",
@@ -74,10 +69,7 @@ changeTextSizeBtns.forEach((btn) =>
 );
 
 showImagesBtn.addEventListener("click", (e) => {
-  imagesAreRendered = !imagesAreRendered;
-  showImagesBtn.classList.toggle("active");
-
-  handleShowImages();
+  handleShowImageBtnClicked();
 });
 
 showFavsBtn.addEventListener("click", () => handleShowFavs());
@@ -162,7 +154,7 @@ const handleDarkModeChange = (e) => {
 };
 
 const activateDarkMode = () => {
-  let state = appState["dark-mode-enabled"];
+  let state = appState["dark-mode-enabled"] ?? false;
 
   let bgColor;
   let textColor;
@@ -299,11 +291,22 @@ function checkArticleFavoriteStatus(buttonStatus) {
   return buttonStatus === "added" ? removeIcon : addIcon;
 }
 
-function handleShowImages() {
+const handleShowImageBtnClicked = () => {
+  let state = fetchStoredState();
+  state["images-are-rendered"] = !state["images-are-rendered"];
+  updateCurrentState(state);
+
+  displayImages();
+};
+
+function displayImages() {
   // the presumption here is that the urls will be filled out on the server side, then utilized on the client side
+
   let currentImgSrcs = currentArticle.imageURLs.map((url) => url);
   let currentImages = Array.from(document.querySelectorAll("img"));
+
   let imagesAreRendered = appState["images-are-rendered"];
+  showImagesBtn.classList.toggle("active", imagesAreRendered);
 
   if (imagesAreRendered === true) {
     currentImages.forEach((img, index) =>
@@ -316,8 +319,6 @@ function handleShowImages() {
 
     currentImages.forEach((img, index) => img.setAttribute("src", ""));
   }
-
-  console.log("images are rendered", showImagesBtn.classList);
 }
 
 function displayArticle(article) {
@@ -359,7 +360,7 @@ function displayArticle(article) {
 
   currentArticle = article;
 
-  handleShowImages();
+  displayImages();
 }
 
 function layoutFavoritesList(list) {
