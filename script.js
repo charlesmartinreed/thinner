@@ -65,7 +65,7 @@ let articleList = [introArticle, secondArticle];
 let currentArticle = articleList[1];
 
 // EVENT LISTENERS
-darkModeToggleBtn.addEventListener("click", (e) => handleDarkModeToggle(e));
+darkModeToggleBtn.addEventListener("click", (e) => handleDarkModeChange(e));
 
 changeTextSizeBtns.forEach((btn) =>
   btn.addEventListener("click", (e) =>
@@ -91,8 +91,8 @@ window.addEventListener("DOMContentLoaded", () => {
 const init = () => {
   // defaults needed
   // dark mode
-  // images visible
   // font size
+  // images visible
   // article list
 
   const defaultState = {
@@ -118,8 +118,8 @@ const init = () => {
   });
 
   activateDarkMode();
+  changeButtonSize();
 
-  handleTextSizeChange(defaultSize);
   displayArticle(currentArticle);
   layoutFavoritesList(articleList);
 };
@@ -152,7 +152,7 @@ const updateCurrentState = (updatedStateObj) => {
 };
 
 // HANDLER FUNCTIONS
-const handleDarkModeToggle = (e) => {
+const handleDarkModeChange = (e) => {
   let currentStateObj = fetchStoredState();
   currentStateObj["dark-mode-enabled"] = !currentStateObj["dark-mode-enabled"];
 
@@ -202,13 +202,31 @@ const activateDarkMode = () => {
   );
 };
 
-function handleTextSizeChange(button) {
-  let size = button.getAttribute("data-size");
+function handleTextSizeChange(e) {
+  let newSize = e.getAttribute("data-size");
 
-  toggleButtonState(button);
+  let currentStateObj = fetchStoredState();
+  currentStateObj["current-font-size"] = newSize;
+
+  updateCurrentState(currentStateObj);
+
+  changeButtonSize();
+}
+
+const changeButtonSize = () => {
+  let state = appState["current-font-size"];
   let newSize;
 
-  switch (size) {
+  changeTextSizeBtns.forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-size") === state);
+    // if (activeBtn.getAttribute("data-size") === btn.getAttribute("data-size")) {
+    //   btn.classList.add("active");
+    // } else {
+    //   btn.classList.remove("active");
+    // }
+  });
+
+  switch (state) {
     case "small":
       newSize = 16;
       break;
@@ -224,11 +242,8 @@ function handleTextSizeChange(button) {
     "--font-size-default",
     `${newSize}px`
   );
-}
+};
 
-const changeButtonSize = () => {
-
-}
 function handleSearchInputChanged(e) {
   let searchInputText;
 
@@ -266,16 +281,6 @@ function handleSearchInputChanged(e) {
   } else {
     layoutFavoritesList(articleList);
   }
-}
-
-function toggleButtonState(activeBtn) {
-  changeTextSizeBtns.forEach((btn) => {
-    if (activeBtn.getAttribute("data-size") === btn.getAttribute("data-size")) {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
-  });
 }
 
 function handleArticleFetch(url) {
