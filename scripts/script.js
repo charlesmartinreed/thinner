@@ -1,9 +1,9 @@
-import { readFromLocalStorage, writeToLocalStorage } from "./scripts/utils.js";
 import {
+  readFromLocalStorage,
+  writeToLocalStorage,
   fetchArticlesFromStorage,
-  createNewArticle,
   initArticleStorage,
-} from "./app.js";
+} from "./utils.js";
 
 const changeTextSizeBtns = document.querySelectorAll(".btn-change-text-size");
 const showImagesBtn = document.querySelector("#btn-show-hide-images");
@@ -17,8 +17,6 @@ const savedArticlesDiv = document.querySelector("#saved-article-container");
 // GLOBALS & CONSTANTS
 let clientIsMobileDisplay;
 let appState;
-
-// DUMMY DATA
 let articleList;
 let currentArticle;
 
@@ -63,8 +61,6 @@ const init = () => {
   if (appState === null) {
     console.log("writing default state");
     appState = writeStateToLocalStorage(defaultState);
-  } else {
-    console.log("state is already written");
   }
 
   window.matchMedia("(max-width: 425px)").addEventListener("change", (e) => {
